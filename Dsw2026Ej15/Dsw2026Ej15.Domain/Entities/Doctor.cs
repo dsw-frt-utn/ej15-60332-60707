@@ -6,18 +6,18 @@ namespace Dsw2026Ej15.Domain.Entities
 {
     public class Doctor : BaseEntity
     {
-        public string _name { get; set; } = "";
-        public string _licenseNumber { get; set; } = "";
-        public bool _isActive { get; set; }
-        public Speciality _speciality { get; set; }
+        public string Name { get; set; } = "";
+        public string LicenseNumber { get; set; } = "";
+        public bool IsActive { get; set; }
+        public Speciality Speciality { get; set; }
 
         public Doctor() { }
         public Doctor(string name, string licenseNumber, bool isActive, Speciality speciality)
         {
-            _name = name;
-            _licenseNumber = licenseNumber;
-            _isActive = isActive;
-            _speciality = speciality;
+            Name = name;
+            LicenseNumber = licenseNumber;
+            IsActive = isActive;
+            Speciality = speciality;
         }
 
     }
