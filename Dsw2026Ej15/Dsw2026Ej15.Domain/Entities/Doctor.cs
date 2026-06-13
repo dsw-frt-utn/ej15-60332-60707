@@ -9,9 +9,8 @@ namespace Dsw2026Ej15.Domain.Entities
         public string Name { get; set; } = "";
         public string LicenseNumber { get; set; } = "";
         public bool IsActive { get; set; }
-        public Speciality Speciality { get; set; }
+        public Speciality? Speciality { get; set; }
 
-        public Doctor() { }
         public Doctor(string name, string licenseNumber, bool isActive, Speciality speciality)
         {
             Name = name;

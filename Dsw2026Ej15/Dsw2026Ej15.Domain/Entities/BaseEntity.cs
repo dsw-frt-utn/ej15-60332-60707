@@ -6,11 +6,10 @@ namespace Dsw2026Ej15.Domain.Entities
 {
     public abstract class BaseEntity
     {
-        private readonly Guid _id;
-
-        public BaseEntity()
+        public Guid Id { get; }
+        protected BaseEntity(Guid? id = null)
         {
-            _id = Guid.NewGuid();
+            Id = id ?? Guid.NewGuid();
         }
 
     }
