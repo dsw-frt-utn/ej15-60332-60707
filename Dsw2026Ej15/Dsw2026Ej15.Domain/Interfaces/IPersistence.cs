@@ -13,5 +13,9 @@ namespace Dsw2026Ej15.Domain.Interfaces
         void AddDoctor(Doctor doctor);
         Doctor? GetDoctorById(Guid id);
         void DeleteDoctor(Guid id);
+
+        bool SpecialityExists(Guid id);
+
+        Speciality GetSpecialityById(Guid id);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Dsw2026Ej15.Domain.Interfaces;
 namespace Dsw2026Ej15.Domain.Entities
 {
-    public class Doctor : BaseEntity
+    public class Doctor : BaseEntity, IDoctor
     {
         public string Name { get; set; } = "";
         public string LicenseNumber { get; set; } = "";
