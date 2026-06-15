@@ -10,7 +10,6 @@ namespace Dsw2026Ej15.Data.Dtos
         public Guid Id { get; set; }
         public string Name { get; set; } = "";
         public string LicenseNumber { get; set; } = "";
-
         public string SpecialityName { get; set; } = "";
 
         public GetDoctorDto(Guid id, string name, string licenseNumber, string specialityName)

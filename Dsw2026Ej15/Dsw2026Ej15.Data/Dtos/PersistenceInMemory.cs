@@ -33,15 +33,21 @@ namespace Dsw2026Ej15.Data.Dtos
             }
         }
 
-        public bool SpecialityExists(Guid id)
-        {
-            return _specialities.Any(s => s.Id == id);
-        }
         public List<Speciality> GetSpeciality()
         {
             return _specialities;
         }
+
+        public bool SpecialityExists(Guid id)
+        {
+            return _specialities.Any(s => s.Id == id);
+        }
         
+        public Speciality? GetSpecialityById(Guid id)
+        {
+            return _specialities.FirstOrDefault(s => s.Id == id);
+        }
+
         public List<Doctor> GetDoctors()
         {
             return _doctors.Where(d => d.IsActive).ToList();
@@ -67,9 +73,5 @@ namespace Dsw2026Ej15.Data.Dtos
           
         }
 
-        public Speciality GetSpecialityById(Guid id)
-        {
-            return _specialities.FirstOrDefault(s => s.Id == id);
-        }
     }
 }

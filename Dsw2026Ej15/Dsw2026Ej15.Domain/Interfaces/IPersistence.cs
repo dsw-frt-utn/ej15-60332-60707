@@ -8,14 +8,14 @@ namespace Dsw2026Ej15.Domain.Interfaces
     public interface IPersistence
     {
         List<Speciality> GetSpeciality();
+        bool SpecialityExists(Guid id);
+        Speciality? GetSpecialityById(Guid id);
+
 
         List<Doctor> GetDoctors();
         void AddDoctor(Doctor doctor);
         Doctor? GetDoctorById(Guid id);
         void DeleteDoctor(Guid id);
-
-        bool SpecialityExists(Guid id);
-
-        Speciality GetSpecialityById(Guid id);
+        
     }
 }

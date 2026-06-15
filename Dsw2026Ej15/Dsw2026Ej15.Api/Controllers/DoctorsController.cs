@@ -28,7 +28,7 @@ namespace Dsw2026Ej15.Api.Controllers
                 }
                 else
                 {
-                    Doctor doctor = new Doctor(doctorDto.Name, doctorDto.LicenseNumber,true, _persistence.GetSpecialityById(doctorDto.SpecialityId));
+                    Doctor doctor = new Doctor(doctorDto.Name, doctorDto.LicenseNumber, true, _persistence.GetSpecialityById(doctorDto.SpecialityId));
                     _persistence.AddDoctor(doctor);
                     return StatusCode(201, doctor);
                 }
@@ -48,9 +48,8 @@ namespace Dsw2026Ej15.Api.Controllers
 
                 foreach (var d in _persistence.GetDoctors())
                 {
-                    if (d.IsActive == true) {
-                        doctors.Add(new GetDoctorDto(d.Id, d.Name, d.LicenseNumber, d.Speciality?.Name ?? ""));
-                    }
+                        doctors.Add(
+                            new GetDoctorDto(d.Id, d.Name, d.LicenseNumber, d.Speciality?.Name ?? ""));
                 }
                 return Ok(doctors);
             }
@@ -59,29 +58,48 @@ namespace Dsw2026Ej15.Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-        //[HttpGet(Name = "PostDoctorsController")]
-        //public IEnumerable<DoctorsController> POST()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new DoctorsController
-        //    {
-        //        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-        //        TemperatureC = Random.Shared.Next(-20, 55),
-        //        Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        //    })
-        //.ToArray();
-        //}
 
-        //[HttpGet(Name = "GetDoctorsController")]
-        //public IEnumerable<DoctorsController> GET()
-        //{
-        //    return Enumerable.Range(1, 5).Select(index => new DoctorsController
-        //    {
-        //        Name = "",
-        //        licenseNumber = "",
-        //        specialityId = ""
-        //    })
-        //    .ToArray();
-        //}
+        [HttpGet("{id}")]
+        public IActionResult GetDoctorById(Guid id)
+        {
+            try
+            {
+                var doctor = _persistence.GetDoctorById(id);
 
+                if (doctor == null || !doctor.IsActive)
+                {
+                    return NotFound("El médico no existe o no está activo.");
+                }
+
+                var dto = new GetDoctorDto(
+                    doctor.Id, doctor.Name, doctor.LicenseNumber, doctor.Speciality?.Name ?? "");
+                return Ok(dto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteDoctor(Guid id)
+        {
+            try
+            {
+                var doctor = _persistence.GetDoctorById(id);
+
+                if (doctor == null || !doctor.IsActive)
+                {
+                    return NotFound("El médico no existe o no está activo.");
+                }
+
+                _persistence.DeleteDoctor(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
