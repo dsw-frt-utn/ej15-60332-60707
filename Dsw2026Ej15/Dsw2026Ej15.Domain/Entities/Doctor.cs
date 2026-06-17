@@ -4,20 +4,21 @@ using System.Text;
 using Dsw2026Ej15.Domain.Interfaces;
 namespace Dsw2026Ej15.Domain.Entities
 {
-    public class Doctor : BaseEntity, IDoctor
+    public class Doctor : BaseEntity
     {
-        public string Name { get; set; } = "";
-        public string LicenseNumber { get; set; } = "";
+        public string Name { get; set; }
+        public string LicenseNumber { get; set; }
         public bool IsActive { get; set; }
         public Speciality? Speciality { get; set; }
 
-        public Doctor(string name, string licenseNumber, bool isActive, Speciality speciality)
+        public Doctor(string name, string licenseNumber, Speciality speciality, Guid? id = null) : base (id) 
         {
             Name = name;
             LicenseNumber = licenseNumber;
-            IsActive = isActive;
+            IsActive = true;
             Speciality = speciality;
         }
+
 
     }
 }

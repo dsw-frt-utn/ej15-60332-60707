@@ -1,4 +1,4 @@
-using Dsw2026Ej15.Data.Dtos;
+using Dsw2026Ej15.Data;
 using Dsw2026Ej15.Domain.Entities;
 using Dsw2026Ej15.Domain.Interfaces;
 namespace Dsw2026Ej15.Api
@@ -11,9 +11,7 @@ namespace Dsw2026Ej15.Api
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            //builder.Services.AddOpenApi();
+            builder.Services.AddControllers();          
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddSingleton<IPersistence, PersistenceInMemory>();
@@ -23,7 +21,6 @@ namespace Dsw2026Ej15.Api
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                //app.MapOpenApi();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
