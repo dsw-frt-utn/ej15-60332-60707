@@ -25,7 +25,7 @@ namespace Dsw2026Ej15.Data
             {
                 string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Sources", "specialities.json");
                 var json = File.ReadAllText(jsonPath);
-                var especialidadesData = JsonSerializer.Deserialize<List<SpecialitiesDto>>(json, 
+                var especialidadesData = JsonSerializer.Deserialize<List<SpecialityDto>>(json, 
                     new JsonSerializerOptions()
                     {
                         PropertyNameCaseInsensitive = true

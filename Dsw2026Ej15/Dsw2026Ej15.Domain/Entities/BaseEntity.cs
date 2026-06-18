@@ -7,8 +7,7 @@ namespace Dsw2026Ej15.Domain.Entities
 {
     public abstract class BaseEntity
     {
-        //[JsonPropertyName("id")]
-        public Guid Id { get; }
+        public Guid Id { get; init; }
         protected BaseEntity(Guid? id = null)
         {
 

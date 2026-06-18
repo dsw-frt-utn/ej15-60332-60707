@@ -38,7 +38,7 @@ public class DoctorsController : ControllerBase
             var doctor = new Doctor(request.Name, request.LicenseNumber, speciality);
             await _persistencia.AddDoctorAsync(doctor);
 
-            return Created("", new DoctorModel.Response(doctor.Name, doctor.LicenseNumber, speciality.Name));
+            return Created();
         }
         catch (ValidationException ex) 
         {
