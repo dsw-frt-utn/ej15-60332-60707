@@ -20,7 +20,7 @@ public class DoctorsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateDoctor([FromBody] DoctorModel.Request request)
     {
-      
+
             if (string.IsNullOrWhiteSpace(request.Name) ||
                 string.IsNullOrWhiteSpace(request.LicenseNumber))
             {
@@ -37,28 +37,7 @@ public class DoctorsController : ControllerBase
             await _persistencia.AddDoctorAsync(doctor);
 
             return Created();
-
-
     }
-
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetDoctorById(Guid id)
-    {
-
-            var doctor = await _persistencia.GetDoctorByIdAsync(id);
-
-            if (doctor == null || !doctor.IsActive)
-            {
-                throw new NotFoundException("El médico no existe o no está activo.");
-
-            }        
-
-            return Ok(new DoctorModel.Response(doctor.Name, doctor.LicenseNumber, doctor.Speciality?.Name ?? ""));
-
-
-    }
-
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<DoctorModel.Response>>> GetDoctor()
@@ -74,6 +53,23 @@ public class DoctorsController : ControllerBase
             return Ok(doctors);
         
         
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetDoctorById(Guid id)
+    {
+
+        var doctor = await _persistencia.GetDoctorByIdAsync(id);
+
+        if (doctor == null || !doctor.IsActive)
+        {
+            throw new NotFoundException("El médico no existe o no está activo.");
+
+        }
+
+        return Ok(new DoctorModel.Response(doctor.Name, doctor.LicenseNumber, doctor.Speciality?.Name ?? ""));
+
+
     }
 
     [HttpDelete("{id}")]
