@@ -1,5 +1,4 @@
 ﻿using Dsw2026Ej15.Api.Models;
-using Dsw2026Ej15.Data.Dtos;
 using Dsw2026Ej15.Domain.Entities;
 using Dsw2026Ej15.Domain.Exceptions;
 using Dsw2026Ej15.Domain.Interfaces;
@@ -21,8 +20,7 @@ public class DoctorsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateDoctor([FromBody] DoctorModel.Request request)
     {
-        try
-        {
+      
             if (string.IsNullOrWhiteSpace(request.Name) ||
                 string.IsNullOrWhiteSpace(request.LicenseNumber))
             {
@@ -39,11 +37,7 @@ public class DoctorsController : ControllerBase
             await _persistencia.AddDoctorAsync(doctor);
 
             return Created();
-        }
-        catch (ValidationException ex) 
-        {
-            return BadRequest(ex.Message);
-        }
+
 
     }
 
@@ -51,112 +45,52 @@ public class DoctorsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetDoctorById(Guid id)
     {
-        try
-        {
+
             var doctor = await _persistencia.GetDoctorByIdAsync(id);
 
             if (doctor == null || !doctor.IsActive)
             {
-                throw new ValidationException("El médico no existe o no está activo.");
-            }
+                throw new NotFoundException("El médico no existe o no está activo.");
+
+            }        
 
             return Ok(new DoctorModel.Response(doctor.Name, doctor.LicenseNumber, doctor.Speciality?.Name ?? ""));
 
-        }
-        catch (ValidationException ex)
-        {
-            return BadRequest(ex.Message);
-        }
 
     }
 
 
-    //[HttpPost]
-    //public IActionResult AddDoctor([FromBody] CreateDoctorDto doctorDto)
-    //{
-    //    try
-    //    {
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<DoctorModel.Response>>> GetDoctor()
+    {
+        
+            List<DoctorModel.Response> doctors = new List<DoctorModel.Response>();
 
-    //        bool isSpecialityValid = _persistence.SpecialityExists(doctorDto.SpecialityId);
-    //        if (isSpecialityValid == false)
-    //        {
-    //            return BadRequest("Invalid speciality.");
-    //        }
-    //        else
-    //        {
-    //            Doctor doctor = new Doctor(doctorDto.Name, doctorDto.LicenseNumber, true, _persistence.GetSpecialityById(doctorDto.SpecialityId));
-    //            _persistence.AddDoctor(doctor);
-    //            return StatusCode(201, doctor);
-    //        }
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        return BadRequest(e.Message);
-    //    }
-    //}
+            foreach (var d in await _persistencia.GetDoctorsAsync())
+            {
+                doctors.Add(
+                    new DoctorModel.Response(d.Name, d.LicenseNumber, d.Speciality?.Name ?? ""));
+            }
+            return Ok(doctors);
+        
+        
+    }
 
-    //[HttpGet]
-    //public ActionResult<IEnumerable<GetDoctorDto>> GetDoctor()
-    //{
-    //    try
-    //    {
-    //        List<GetDoctorDto> doctors = new List<GetDoctorDto>();
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteDoctor(Guid id)
+    {
+     
+            var doctor = await _persistencia.GetDoctorByIdAsync(id);
 
-    //        foreach (var d in _persistence.GetDoctors())
-    //        {
-    //            doctors.Add(
-    //                new GetDoctorDto(d.Id, d.Name, d.LicenseNumber, d.Speciality?.Name ?? ""));
-    //        }
-    //        return Ok(doctors);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        return BadRequest(e.Message);
-    //    }
-    //}
+            if (doctor == null || !doctor.IsActive)
+            {
+                throw new NotFoundException("El médico no existe o no está activo.");
+            }
 
-    //[HttpGet("{id}")]
-    //public IActionResult GetDoctorById(Guid id)
-    //{
-    //    try
-    //    {
-    //        var doctor = _persistence.GetDoctorById(id);
-
-    //        if (doctor == null || !doctor.IsActive)
-    //        {
-    //            return NotFound("El médico no existe o no está activo.");
-    //        }
-
-    //        var dto = new GetDoctorDto(
-    //            doctor.Id, doctor.Name, doctor.LicenseNumber, doctor.Speciality?.Name ?? "");
-    //        return Ok(dto);
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        return BadRequest(e.Message);
-    //    }
-    //}
-
-    //[HttpDelete("{id}")]
-    //public IActionResult DeleteDoctor(Guid id)
-    //{
-    //    try
-    //    {
-    //        var doctor = _persistence.GetDoctorById(id);
-
-    //        if (doctor == null || !doctor.IsActive)
-    //        {
-    //            return NotFound("El médico no existe o no está activo.");
-    //        }
-
-    //        _persistence.DeleteDoctor(id);
-    //        return NoContent();
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        return BadRequest(e.Message);
-    //    }
-    //}
+            await _persistencia.DeleteDoctorAsync(id);
+            return NoContent();
+        
+    }
 
 
 

@@ -57,7 +57,15 @@ namespace Dsw2026Ej15.Data
             return await Task.FromResult(_doctors.FirstOrDefault(d => d.Id == id));
         }
 
-       
+        public async Task<IEnumerable<Doctor>> GetDoctorsAsync()
+        {
+            return await Task.FromResult(_doctors);
 
+        }
+
+        public Task DeleteDoctorAsync(Guid id)
+        {
+            return Task.Run(() => _doctors.RemoveAll(d => d.Id == id));
+        }
     }
 }

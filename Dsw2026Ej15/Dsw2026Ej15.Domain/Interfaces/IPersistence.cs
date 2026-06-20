@@ -12,7 +12,8 @@ namespace Dsw2026Ej15.Domain.Interfaces
 
         Task AddDoctorAsync(Doctor doctor);
         Task<Doctor?> GetDoctorByIdAsync(Guid id);
+        Task<IEnumerable<Doctor>> GetDoctorsAsync();
+        Task DeleteDoctorAsync(Guid id);
 
-        
     }
 }
