@@ -63,9 +63,16 @@ namespace Dsw2026Ej15.Data
 
         }
 
-        public Task DeleteDoctorAsync(Guid id)
+        public async Task DeleteDoctorAsync(Guid id)
         {
-            return Task.Run(() => _doctors.RemoveAll(d => d.Id == id));
+            foreach(Doctor d in _doctors)
+            {
+                if (d.Id == id)
+                {
+                    d.Deactivate();
+                    break;
+                }
+            }
         }
     }
 }

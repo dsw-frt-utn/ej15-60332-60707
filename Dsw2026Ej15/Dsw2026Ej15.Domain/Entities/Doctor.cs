@@ -11,6 +11,10 @@ namespace Dsw2026Ej15.Domain.Entities
         public bool IsActive { get; private set; }
         public Speciality? Speciality { get; private set; }
 
+        public Guid? SpecialityId {  get; set; }
+
+        private Doctor() { }
+
         public Doctor(string name, string licenseNumber, Speciality speciality, Guid? id = null) : base (id) 
         {
             Name = name;
@@ -18,7 +22,10 @@ namespace Dsw2026Ej15.Domain.Entities
             IsActive = true;
             Speciality = speciality;
         }
-
+        public void Deactivate()
+        {
+            IsActive = false;
+        }
 
     }
 }
