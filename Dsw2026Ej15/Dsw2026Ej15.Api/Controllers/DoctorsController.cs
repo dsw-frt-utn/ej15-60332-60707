@@ -7,9 +7,8 @@ using System.Numerics;
 
 namespace Dsw2026Ej15.Api.Controllers;
 
-[ApiController]
-[Route("api/doctors")]
-public class DoctorsController : ControllerBase
+[Route("doctors")]
+public class DoctorsController : ApiController
 {
     private readonly IPersistence _persistencia;
     public DoctorsController(IPersistence persistencia)
@@ -34,60 +33,46 @@ public class DoctorsController : ControllerBase
             }
 
             var doctor = new Doctor(request.Name, request.LicenseNumber, speciality);
-            await _persistencia.AddDoctorAsync(doctor);
+            await _persistencia.SaveDoctorAsync(doctor);
 
             return Created();
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<DoctorModel.Response>>> GetDoctor()
+    public async Task<ActionResult> GetAllDoctors()
     {
-        
-            List<DoctorModel.Response> doctors = new List<DoctorModel.Response>();
 
-            foreach (var d in await _persistencia.GetDoctorsAsync())
-            {
-                doctors.Add(
-                    new DoctorModel.Response(d.Name, d.LicenseNumber, d.Speciality?.Name ?? ""));
-            }
-            return Ok(doctors);
-        
-        
+        var doctors = await _persistencia.GetAllDoctorsAsync();
+        return Ok(doctors.Select(d => new DoctorModel.Response(d.Name, d.LicenseNumber, d.Speciality?.Name)));
+
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetDoctorById(Guid id)
+    public async Task<IActionResult> GetDoctorById([FromRoute]Guid id)
     {
 
-        var doctor = await _persistencia.GetDoctorByIdAsync(id);
-
-        if (doctor == null || !doctor.IsActive)
-        {
-            throw new NotFoundException("El médico no existe o no está activo.");
-
-        }
-
-        return Ok(new DoctorModel.Response(doctor.Name, doctor.LicenseNumber, doctor.Speciality?.Name ?? ""));
-
+        var doctor = (await GetDoctor(id));
+        return Ok(new DoctorModel.Response(doctor.Name, doctor.LicenseNumber, doctor.Speciality?.Name));
 
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteDoctor(Guid id)
+    public async Task<IActionResult> DeleteDoctor([FromRoute]Guid id)
     {
-     
-            var doctor = await _persistencia.GetDoctorByIdAsync(id);
 
-            if (doctor == null || !doctor.IsActive)
-            {
-                throw new NotFoundException("El médico no existe o no está activo.");
-            }
+        var doctor = (await GetDoctor(id))!;
+        doctor.Deactivate();
+        await _persistencia.UpdateDoctorAsync(doctor);
+        return NoContent();
 
-            await _persistencia.DeleteDoctorAsync(id);
-            return NoContent();
-        
     }
 
+    private async Task<Doctor?> GetDoctor(Guid id)
+    {
 
+        return await _persistencia.GetDoctorByIdAsync(id) ?? 
+            throw new EntityNotFoundException("Medico no encontrado");
+
+    }
 
 }

@@ -40,32 +40,30 @@ namespace Dsw2026Ej15.Data
             }
         }
 
-                
-        public async Task<Speciality?> GetSpecialityByIdAsync(Guid id)
+        public async Task<IEnumerable<Doctor>> GetAllDoctorsAsync()
         {
-            return await Task.FromResult(_specialities.SingleOrDefault(s => s.Id == id));
-        }
-
-
-        public async Task AddDoctorAsync(Doctor doctor)
-        {
-            await Task.Run(() => _doctors.Add(doctor));
+            return _doctors.Where(d => d.IsActive);
         }
 
         public async Task<Doctor?> GetDoctorByIdAsync(Guid id)
         {
-            return await Task.FromResult(_doctors.FirstOrDefault(d => d.Id == id));
+            return _doctors.SingleOrDefault(d => d.Id == id && d.IsActive);
         }
 
-        public async Task<IEnumerable<Doctor>> GetDoctorsAsync()
+        public async Task<Speciality?> GetSpecialityByIdAsync(Guid id)
         {
-            return await Task.FromResult(_doctors);
-
+            return _specialities.SingleOrDefault(s => s.Id == id);
         }
-
-        public Task DeleteDoctorAsync(Guid id)
+        public async Task SaveDoctorAsync(Doctor doctor)
         {
-            return Task.Run(() => _doctors.RemoveAll(d => d.Id == id));
+            _doctors.Add(doctor);
         }
+
+        public async Task UpdateDoctorAsync(Doctor doctor)
+        {
+            _doctors.Remove(doctor);
+            _doctors.Add(doctor);
+        }
+
     }
 }
