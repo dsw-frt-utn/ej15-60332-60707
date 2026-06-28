@@ -14,14 +14,12 @@ namespace Dsw2026Ej15.Data
         {
             _context = context;
         }
-        public async Task<IEnumerable<Doctor>> GetAllDoctorsAsync() // hacerlo generico
+        public async Task<IEnumerable<Doctor>> GetAllDoctorsAsync() 
         {
-            return _context.Doctors.Include(d => d.Speciality).Where(d => d.IsActive);
-            
-            //return _context.Doctors.Include("Speciality").Where(d => d.IsActive);
-            //return _context.Doctors
-            //.Include(nameof(Doctor.Speciality)
-            //.Where(d => d.IsActive); 
+            return _context.Doctors
+                .Include(nameof(Doctor.Speciality))
+                .Where(d => d.IsActive);
+
         }
 
         public async Task<Doctor?> GetDoctorByIdAsync(Guid id)
